@@ -1,0 +1,33 @@
+### obtener todos los provinces
+GET http://localhost:3000/api/provinces
+
+
+### obtener un province
+GET http://localhost:3000/api/provinces/94f70156-1e3d-4cbd-960e-5a4f7240f812
+
+### crear un nuevo province
+POST http://localhost:3000/api/provinces
+Content-Type: application/json
+
+{
+  "name": "La Pampa"
+}
+
+### modificar un province (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/provinces/a17f2a87-ad45-4e86-b5e9-6bab8fada3af
+Content-Type: application/json
+
+{
+  "name": "Formosa" 
+}
+
+### modificar un province (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/provinces/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "name": "Santa Cruz"
+}
+
+### borrar un province
+DELETE http://localhost:3000/api/provinces/a17f2a87-ad45-4e86-b5e9-6bab8fada3af
