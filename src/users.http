@@ -1,0 +1,47 @@
+### obtener todos los users
+GET http://localhost:3000/api/users
+
+
+### obtener un user
+GET http://localhost:3000/api/users/2040a093-4526-4e1a-8eca-35ef7c00a085
+
+### crear un nuevo user
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "name": "Matias",
+  "lastname": "Avalos",
+  "dni": "42100234",
+  "phone_number": 3364456345,
+  "email": "m_avalos@gmail.com",
+  "role": "Cliente",
+  "username": "mati77",
+  "password": "apolo"
+}
+
+### modificar un user (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/users/fff532da-ad3e-42f1-9c2d-623014a52eb5
+Content-Type: application/json
+
+{
+  "name": "Angel",
+  "lastname": "Di Maria",
+  "dni": "32001254",
+  "phone_number": 3412456345,
+  "email": "dimaria@gmail.com",
+  "role": "Cliente",
+  "username": "fideo7",
+  "password": "carc"
+}
+
+### modificar un user (PATCH - recurso parcial)
+//PATCH http://localhost:3000/api/users/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+//Content-Type: application/json
+
+//{
+//  "name": "Santa Cruz"
+//}
+
+### borrar un user
+DELETE http://localhost:3000/api/users/0439f349-4e38-4635-af54-8de6807e00da

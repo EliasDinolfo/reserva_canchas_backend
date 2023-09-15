@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express'
 import { Province } from './province.js'
 import { City } from './city.js'
+import { User } from './user.js'
 //import { it } from 'node:test'
 
 const app = express()
@@ -188,6 +189,131 @@ app.delete('/api/cities/:id', (req, res) => {
   } else {
     cities.splice(cityIdx, 1)
     res.status(200).send({ message: 'City deleted successfully' })
+  }
+})
+
+//user -> /api/users/
+
+//post /api/users -> crear nuevos user
+//delete /api/users/:id -> borrar user con id = :id
+//put & patch /api/users/:id -> modificar user con id = :id
+
+const users = [
+  new User(
+    'Lionel',
+    'Messi',
+    '35899298',
+    3414352353,
+    'messi10@gmail.com',
+    'Cliente',
+    'liomessi10',
+    'elmasgrande'
+  ),
+  new User(
+    'Gabriel',
+    'Ramirez',
+    '41102345',
+    3412435655,
+    'gabo@gmail.com',
+    'Administrador',
+    'gab0cabj',
+    'bokita'
+  ),
+  new User(
+    'Agustin',
+    'Lipari',
+    '41799878',
+    3364223746,
+    'agus_lipari@gmail.com',
+    'Operador',
+    'lipaDoc',
+    'millonario'
+  )
+]
+
+function sanitizeUserInput(req: Request, res: Response, next: NextFunction) {
+  req.body.sanitizedInput = {
+    name: req.body.name,
+    lastname: req.body.lastname,
+    dni: req.body.dni,
+    phone_number: req.body.phone_number,
+    email: req.body.email,
+    role: req.body.role,
+    username: req.body.username,
+    password: req.body.password
+  }
+  //more checks here
+
+  Object.keys(req.body.sanitizedInput).forEach((key) => {
+    if (req.body.sanitizedInput[key] === undefined) {
+      delete req.body.sanitizedInput[key]
+    }
+  })
+  next()
+}
+
+app.get('/api/users', (req, res) => {
+  res.json({ data: users })
+})
+
+app.get('/api/users/:id', (req, res) => {
+  const user = users.find((user) => user.id === req.params.id)
+  if (!user) {
+    return res.status(404).send({ message: 'User not found' })
+  }
+  res.json({ data: user })
+})
+
+app.post('/api/users', sanitizeUserInput, (req, res) => {
+  const input = req.body.sanitizedInput
+
+  const user = new User(
+    input.name,
+    input.lastname,
+    input.dni,
+    input.phone_number,
+    input.email,
+    input.role,
+    input.username,
+    input.password
+  )
+
+  users.push(user)
+  return res.status(201).send({ message: 'User created', data: user })
+})
+
+app.put('/api/users/:id', sanitizeUserInput, (req, res) => {
+  const userIdx = users.findIndex((user) => user.id === req.params.id)
+
+  if (userIdx === -1) {
+    return res.status(404).send({ message: 'User not found' })
+  }
+
+  users[userIdx] = { ...users[userIdx], ...req.body.sanitizedInput }
+
+  return res.status(200).send({ message: 'User updated successfully', data: users[userIdx] })
+})
+
+/* app.patch('/api/users/:id', sanitizeUserInput, (req, res) => {
+  const userIdx = users.findIndex((user) => user.id === req.params.id)
+
+  if (userIdx === -1) {
+    return res.status(404).send({ message: 'User not found' })
+  }
+
+  Object.assign(users[userIdx], req.body.sanitizedInput)
+
+  return res.status(200).send({ message: 'User updated successfully', data: users[userIdx] })
+}) */
+
+app.delete('/api/users/:id', (req, res) => {
+  const userIdx = users.findIndex((user) => user.id === req.params.id)
+
+  if (userIdx === -1) {
+    res.status(404).send({ message: 'User not found' })
+  } else {
+    users.splice(userIdx, 1)
+    res.status(200).send({ message: 'User deleted successfully' })
   }
 })
 
