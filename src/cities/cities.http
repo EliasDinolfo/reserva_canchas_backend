@@ -3,7 +3,7 @@ GET http://localhost:3000/api/cities
 
 
 ### obtener un city
-GET http://localhost:3000/api/cities/526a7486-d630-4f89-a205-a9ae67594bff
+GET http://localhost:3000/api/cities/e8d391bf-a98e-4c4e-ace4-9862ef523c30
 
 ### crear un nuevo city
 POST http://localhost:3000/api/cities
@@ -11,16 +11,19 @@ Content-Type: application/json
 
 {
   "name": "Funes",
-  "id_Province": "e8d391bf-a98e-4c4e-ace4-9862ef523c54"
+  "id_province":1,
+  "postal_code":2000,
+  "id": "e8d391bf-a98e-4c4e-ace4-9862ef523c54"
 }
 
 ### modificar un city (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/cities/d7f423d0-22ad-4135-a9be-47a066fd6ed0
+PUT http://localhost:3000/api/cities/e8d391bf-a98e-4c4e-ace4-9862ef523c30
 Content-Type: application/json
 
 {
   "name": "Venado Tuerto",
-  "id_Province": "e8d391bf-a98e-4c4e-ace4-9862ef523c54"
+  "id_Province": 1,
+  "postal_code":2000
 }
 
 ### modificar un city (PATCH - recurso parcial)
@@ -32,4 +35,4 @@ Content-Type: application/json
 //}
 
 ### borrar un city
-DELETE http://localhost:3000/api/cities/ffd8c011-855a-4d76-b80c-325c2eb78ea4
+DELETE http://localhost:3000/api/cities/e8d391bf-a98e-4c4e-ace4-9862ef523c30
