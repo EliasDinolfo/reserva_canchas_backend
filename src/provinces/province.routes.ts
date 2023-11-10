@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  sanitizeProvinceInput,
   findAll,
   findOne,
   add,
@@ -12,7 +11,6 @@ export const provinceRouter = Router();
 
 provinceRouter.get("/", findAll);
 provinceRouter.get("/:id", findOne);
-provinceRouter.post("/", sanitizeProvinceInput, add);
-provinceRouter.put("/:id", sanitizeProvinceInput, update);
-provinceRouter.patch("/:id", sanitizeProvinceInput, update);
+provinceRouter.post("/", add);
+provinceRouter.put("/:id", update);
 provinceRouter.delete("/:id", remove);

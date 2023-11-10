@@ -1,10 +1,8 @@
-import { Request, Response, NextFunction } from "express";
-import { ProvinceRepository } from "./province.repository.js";
+import { Request, Response } from "express";
+import { orm } from "../shared/db/orm.js";
 import { Province } from "./province.entity.js";
 
-const repository = new ProvinceRepository();
-
-function sanitizeProvinceInput(
+/* function sanitizeProvinceInput(
   req: Request,
   res: Response,
   next: NextFunction
@@ -20,54 +18,60 @@ function sanitizeProvinceInput(
     }
   });
   next();
-}
+} */
+
+const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
-  res.json({ data: await repository.findAll() });
+  try {
+    const provinces = await em.find(Province, {});
+    res.status(200).json({ message: "Province list", data: provinces });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
 async function findOne(req: Request, res: Response) {
-  const id = req.params.id;
-  const province = await repository.findOne({ id });
-  if (!province) {
-    return res.status(404).send({ message: "Province not found" });
+  try {
+    const id = req.params.id;
+    const province = await em.findOneOrFail(Province, { id });
+    res.status(200).json({ message: "Province found", data: province });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
-  res.json({ data: province });
 }
 
 async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput;
-
-  const provinceInput = new Province(input.name);
-
-  const province = await repository.add(provinceInput);
-  return res.status(201).send({ message: "Province created", data: province });
+  try {
+    const province = em.create(Province, req.body);
+    await em.flush();
+    res.status(201).json({ message: "Province created", data: province });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
 async function update(req: Request, res: Response) {
-  const province = await repository.update(
-    req.params.id,
-    req.body.sanitizedInput
-  );
-
-  if (!province) {
-    return res.status(404).send({ message: "Province not found" });
+  try {
+    const id = req.params.id;
+    const province = em.getReference(Province, id);
+    em.assign(province, req.body);
+    await em.flush();
+    res.status(200).json({ message: "Province updated" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
-
-  return res
-    .status(200)
-    .send({ message: "Province updated successfully", data: province });
 }
 
 async function remove(req: Request, res: Response) {
-  const id = req.params.id;
-  const province = await repository.delete({ id });
-
-  if (!province) {
-    res.status(404).send({ message: "Province not found" });
-  } else {
-    res.status(200).send({ message: "Province deleted successfully" });
+  try {
+    const id = req.params.id;
+    const province = em.getReference(Province, id);
+    await em.removeAndFlush(province);
+    res.status(200).send({ message: "Province deleted" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 }
 
-export { sanitizeProvinceInput, findAll, findOne, add, update, remove };
+export { findAll, findOne, add, update, remove };

@@ -1,11 +1,8 @@
-### obtener todos los users
+### GET ALL
 GET http://localhost:3000/api/users
 
-
-### obtener un user
-GET http://localhost:3000/api/users/654d8d58c95916cfc5945073
-
-### crear un nuevo user
+### POST
+# @name createUser
 POST http://localhost:3000/api/users
 Content-Type: application/json
 
@@ -20,8 +17,14 @@ Content-Type: application/json
   "password": "apolo"
 }
 
-### modificar un user (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/users/654d8d58c95916cfc5945074
+###ID
+@id = {{createUser.response.body.data.id}}
+
+### GET ONE
+GET http://localhost:3000/api/users/{{id}}
+
+### PUT
+PUT http://localhost:3000/api/users/{{id}}
 Content-Type: application/json
 
 {
@@ -35,18 +38,38 @@ Content-Type: application/json
   "password": "carc"
 }
 
-### modificar un user (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/users/654d8d58c95916cfc5945074
+### POST 2
+POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-  "name": "Mirtha",
-  "lastname": "Legrand",
-  "phone_number": "3412456345",
-  "email": "mlegrand@gmail.com",
-  "username": "mir",
-  "password": "123"
+  "name": "Marcela",
+  "lastname": "Juarez",
+  "dni": "25221",
+  "phone_number": "5523221",
+  "email": "m_juarezs@gmail.com",
+  "role": "Cliente",
+  "username": "marjua",
+  "password": "12345"
 }
 
-### borrar un user
-DELETE http://localhost:3000/api/users/654d9a246230ef3639de8cab
+### POST
+# @name createUserToDelete
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "name": "Miguel",
+  "lastname": "Pala",
+  "dni": "221215",
+  "phone_number": "62312121",
+  "email": "pala@gmail.com",
+  "role": "Cliente",
+  "username": "mpala71",
+  "password": "pal"
+}
+
+### DELETE
+@idToDelete = {{createUserToDelete.response.body.data.id}}
+
+DELETE http://localhost:3000/api/users/{{idToDelete}}

@@ -1,11 +1,8 @@
-### obtener todos los provinces
+### GET ALL
 GET http://localhost:3000/api/provinces
 
-
-### obtener un province
-GET http://localhost:3000/api/provinces/654d76bd51dac962061db9ec
-
-### crear un nuevo province
+### POST
+# @name createProvince
 POST http://localhost:3000/api/provinces
 Content-Type: application/json
 
@@ -13,21 +10,46 @@ Content-Type: application/json
   "name": "La Pampa"
 }
 
-### modificar un province (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/provinces/654d779b51dac962061db9ed
+### ID
+@id = {{createProvince.response.body.data.id}}
+
+### GET ONE
+GET http://localhost:3000/api/provinces/{{id}}
+
+
+### PUT
+PUT  http://localhost:3000/api/provinces/{{id}}
 Content-Type: application/json
 
 {
-  "name": "Formosa" 
+  "name": "Rio Negro"
 }
 
-### modificar un province (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/provinces/654d779b51dac962061db9ed
+### POST2
+POST http://localhost:3000/api/provinces
 Content-Type: application/json
 
 {
-  "name": "Santa Cruz"
+  "name": "Tucumán"
 }
 
-### borrar un province
-DELETE http://localhost:3000/api/provinces/654d779b51dac962061db9ed
+### POST3
+POST http://localhost:3000/api/provinces
+Content-Type: application/json
+
+{
+  "name": "San Juan"
+}
+
+### POST PROVINCE TO DELETE
+# @name createProvinceToDelete
+POST http://localhost:3000/api/provinces
+Content-Type: application/json
+
+{
+  "name": "Misiones"
+}
+
+### DELETE
+@idToDelete = {{createProvinceToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/provinces/{{idToDelete}}

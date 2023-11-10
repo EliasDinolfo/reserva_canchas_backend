@@ -1,38 +1,64 @@
-### obtener todos los cities
-GET http://localhost:3000/api/cities
+### GET all characters
+http://localhost:3000/api/cities
 
 
-### obtener un city
-GET http://localhost:3000/api/cities/654d76bd51dac962061db9ea
-
-### crear un nuevo city
+### POST a character
+# @name createCity
 POST http://localhost:3000/api/cities
 Content-Type: application/json
 
 {
-  "name": "Funes",
-  "id_province":1,
-  "postal_code":2000,
-  "id": "e8d391bf-a98e-4c4e-ace4-9862ef523c54"
+  "name": "Rosario",
+  "province":"654e27ca0880972da9a187bb",
+  "postal_code":"2000"
 }
 
-### modificar un city (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/cities/654d76bd51dac962061db9ea
+### ID
+@id = {{createCity.response.body.data.id}}
+
+### GET one
+http://localhost:3000/api/cities/{{id}}
+
+### PUT
+PUT http://localhost:3000/api/cities/{{id}}
 Content-Type: application/json
 
 {
   "name": "Venado Tuerto",
-  "id_Province": 1,
-  "postal_code":2000
+  "province": "654e27ca0880972da9a187bb",
+  "postal_code":"2000"
 }
 
-### modificar un city (PATCH - recurso parcial)
-//PATCH http://localhost:3000/api/cities/654d76bd51dac962061db9ea
-//Content-Type: application/json
+### POST
+POST http://localhost:3000/api/cities
+Content-Type: application/json
 
-//{
-//  "name": "Santa Fe"
-//}
+{
+  "name": "Roldan",
+  "province":"654e27ca0880972da9a187bb",
+  "postal_code":"2000"
+}
 
-### borrar un city
-DELETE http://localhost:3000/api/cities/654d76bd51dac962061db9ea
+### POST another
+# @name createCityToDelete
+POST http://localhost:3000/api/cities
+Content-Type: application/json
+
+{
+  "name": "Santa Fe",
+  "province":"654e27ca0880972da9a187bb",
+  "postal_code":"2000"
+}
+### DELETE
+@idToDelete = {{createCityToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/cities/{{idToDelete}}
+
+### PATCH
+PATCH http://localhost:3000/api/cities/{{idToDelete}}
+Content-Type: application/json
+
+{
+  "name": "Villa Gobernador Galvez",
+  "province":"6531d4aedc98243fffe841e5",
+  "postal_code":"2000"
+}

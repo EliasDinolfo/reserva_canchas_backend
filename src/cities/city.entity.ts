@@ -1,10 +1,15 @@
-import { ObjectId } from "mongodb";
+import { Entity, Property, ManyToOne, Rel } from "@mikro-orm/core";
+import { BaseEntity } from "../shared/db/baseEntity.entity.js";
+import { Province } from "../provinces/province.entity.js";
 
-export class City {
-  constructor(
-    public name: string,
-    public id_province: number,
-    public postal_code: number,
-    public _id?: ObjectId
-  ) {}
+@Entity()
+export class City extends BaseEntity {
+  @Property({ nullable: false })
+  name!: string;
+
+  @Property({ nullable: false })
+  postal_code!: string;
+
+  @ManyToOne(() => Province, { nullable: false })
+  province!: Rel<Province>;
 }

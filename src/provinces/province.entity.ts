@@ -1,5 +1,20 @@
-import { ObjectId } from "mongodb";
+import {
+  Entity,
+  OneToMany,
+  Property,
+  Cascade,
+  Collection,
+} from "@mikro-orm/core";
+import { BaseEntity } from "../shared/db/baseEntity.entity.js";
+import { City } from "../cities/city.entity.js";
 
-export class Province {
-  constructor(public name: string, public _id?: ObjectId) {}
+@Entity()
+export class Province extends BaseEntity {
+  @Property({ nullable: false, unique: true })
+  name!: string;
+
+  @OneToMany(() => City, (city) => city.province, {
+    cascade: [Cascade.ALL],
+  })
+  cities = new Collection<City>(this);
 }

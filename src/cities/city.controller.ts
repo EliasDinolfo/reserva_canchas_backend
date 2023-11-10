@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { CityRepository } from "./city.repository.js";
 import { City } from "./city.entity.js";
+import { orm } from "../shared/db/orm.js";
 
-const repository = new CityRepository();
+const em = orm.em;
 
 function sanitizeCityInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
-    id_province: req.body.id_province,
+    province: req.body.province,
     postal_code: req.body.postal_code,
   };
   //more checks here
@@ -21,47 +21,58 @@ function sanitizeCityInput(req: Request, res: Response, next: NextFunction) {
 }
 
 async function findAll(req: Request, res: Response) {
-  res.json({ data: await repository.findAll() });
+  try {
+    const cities = await em.find(City, {}, { populate: ["province"] });
+    res.status(200).json({ message: "City list", data: cities });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
 async function findOne(req: Request, res: Response) {
-  const id = req.params.id;
-  const city = await repository.findOne({ id });
-  if (!city) {
-    return res.status(404).send({ message: "City not found" });
+  try {
+    const id = req.params.id;
+    const city = await em.findOneOrFail(
+      City,
+      { id },
+      { populate: ["province"] }
+    );
+    res.status(200).json({ message: "City found", data: city });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
-  res.json({ data: city });
 }
 
 async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput;
-
-  const cityInput = new City(input.name, input.id_province, input.postal_code);
-
-  const city = await repository.add(cityInput);
-  return res.status(201).send({ message: "City created", data: city });
+  try {
+    const city = em.create(City, req.body.sanitizedInput);
+    await em.flush();
+    res.status(201).json({ message: "City created", data: city });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
 async function update(req: Request, res: Response) {
-  const city = await repository.update(req.params.id, req.body.sanitizedInput);
-
-  if (!city) {
-    return res.status(404).send({ message: "City not found" });
+  try {
+    const id = req.params.id;
+    const cityToUpdate = await em.findOneOrFail(City, { id });
+    em.assign(cityToUpdate, req.body.sanitizedInput);
+    await em.flush();
+    res.status(200).json({ message: "City updated", data: cityToUpdate });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
-
-  return res
-    .status(200)
-    .send({ message: "City updated successfully", data: city });
 }
 
 async function remove(req: Request, res: Response) {
-  const id = req.params.id;
-  const city = await repository.delete({ id });
-
-  if (!city) {
-    res.status(404).send({ message: "City not found" });
-  } else {
-    res.status(200).send({ message: "City deleted successfully" });
+  try {
+    const id = req.params.id;
+    const city = em.getReference(City, id);
+    await em.removeAndFlush(city);
+    res.status(200).send({ message: "City deleted" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 }
 
