@@ -1,42 +1,38 @@
 import { Repository } from "../shared/repository.js";
 import { City } from "./city.entity.js";
+import { db } from "../shared/db/conn.js";
+import { ObjectId } from "mongodb";
 
-const cities = [
-  new City("San Nicolas", 2, 2900, "e8d391bf-a98e-4c4e-ace4-9862ef523c30"),
-  new City("Roldan", 1, 2134, "e8d391bf-a98e-4c4e-ace4-9862ef523c54"),
-  new City("Rosario", 1, 2000, "e8d391bf-a98e-4c4e-ace4-9862ef523c54"),
-];
+const cities = db.collection<City>("cities");
 
 export class CityRepository implements Repository<City> {
-  public findAll(): City[] | undefined {
-    return cities;
+  public async findAll(): Promise<City[] | undefined> {
+    return await cities.find().toArray();
   }
 
-  public findOne(item: { id: string }): City | undefined {
-    return cities.find((city) => city.id === item.id);
+  public async findOne(item: { id: string }): Promise<City | undefined> {
+    const _id = new ObjectId(item.id);
+    return (await cities.findOne({ _id })) || undefined;
   }
 
-  public add(item: City): City | undefined {
-    cities.push(item);
+  public async add(item: City): Promise<City | undefined> {
+    item._id = (await cities.insertOne(item)).insertedId;
     return item;
   }
 
-  public update(item: City): City | undefined {
-    const cityIdx = cities.findIndex((city) => city.id === item.id);
-
-    if (cityIdx !== -1) {
-      cities[cityIdx] = { ...cities[cityIdx], ...item };
-    }
-    return cities[cityIdx];
+  public async update(id: string, item: City): Promise<City | undefined> {
+    const _id = new ObjectId(id);
+    return (
+      (await cities.findOneAndUpdate(
+        { _id },
+        { $set: item },
+        { returnDocument: "after" }
+      )) || undefined
+    );
   }
 
-  public delete(item: { id: string }): City | undefined {
-    const cityIdx = cities.findIndex((city) => city.id === item.id);
-
-    if (cityIdx !== -1) {
-      const deletedCities = cities[cityIdx];
-      cities.splice(cityIdx, 1);
-      return deletedCities;
-    }
+  public async delete(item: { id: string }): Promise<City | undefined> {
+    const _id = new ObjectId(item.id);
+    return (await cities.findOneAndDelete({ _id })) || undefined;
   }
 }

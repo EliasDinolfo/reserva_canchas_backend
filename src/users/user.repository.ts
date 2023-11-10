@@ -1,69 +1,38 @@
 import { Repository } from "../shared/repository.js";
 import { User } from "./user.entity.js";
+import { db } from "../shared/db/conn.js";
+import { ObjectId } from "mongodb";
 
-const users = [
-  new User(
-    "Lionel",
-    "Messi",
-    "35899298",
-    "3414352353",
-    "messi10@gmail.com",
-    "Cliente",
-    "liomessi10",
-    "elmasgrande"
-  ),
-  new User(
-    "Gabriel",
-    "Ramirez",
-    "41102345",
-    "3412435655",
-    "gabo@gmail.com",
-    "Administrador",
-    "gab0cabj",
-    "bokita"
-  ),
-  new User(
-    "Agustin",
-    "Lipari",
-    "41799878",
-    "3364223746",
-    "agus_lipari@gmail.com",
-    "Operador",
-    "lipaDoc",
-    "millonario"
-  ),
-];
+const users = db.collection<User>("users");
 
 export class UserRepository implements Repository<User> {
-  public findAll(): User[] | undefined {
-    return users;
+  public async findAll(): Promise<User[] | undefined> {
+    return await users.find().toArray();
   }
 
-  public findOne(item: { id: string }): User | undefined {
-    return users.find((user) => user.id === item.id);
+  public async findOne(item: { id: string }): Promise<User | undefined> {
+    const _id = new ObjectId(item.id);
+    return (await users.findOne({ _id })) || undefined;
   }
 
-  public add(item: User): User | undefined {
-    users.push(item);
+  public async add(item: User): Promise<User | undefined> {
+    item._id = (await users.insertOne(item)).insertedId;
     return item;
   }
 
-  public update(item: User): User | undefined {
-    const userIdx = users.findIndex((user) => user.id === item.id);
-
-    if (userIdx !== -1) {
-      users[userIdx] = { ...users[userIdx], ...item };
-    }
-    return users[userIdx];
+  public async update(id: string, item: User): Promise<User | undefined> {
+    const _id = new ObjectId(id);
+    return (
+      (await users.findOneAndUpdate(
+        { _id },
+        { $set: item },
+        { returnDocument: "after" }
+      )) || undefined
+    );
   }
 
-  public delete(item: { id: string }): User | undefined {
-    const userIdx = users.findIndex((user) => user.id === item.id);
-
-    if (userIdx !== -1) {
-      const deletedUsers = users[userIdx];
-      users.splice(userIdx, 1);
-      return deletedUsers;
-    }
+  public async delete(item: { id: string }): Promise<User | undefined> {
+    const _id = new ObjectId(item.id);
+    return (await users.findOneAndDelete({ _id })) || undefined;
   }
 }

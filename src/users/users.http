@@ -3,7 +3,7 @@ GET http://localhost:3000/api/users
 
 
 ### obtener un user
-GET http://localhost:3000/api/users/3a7a4c51-6f50-481e-95b1-d7fcb0931233
+GET http://localhost:3000/api/users/654d8d58c95916cfc5945073
 
 ### crear un nuevo user
 POST http://localhost:3000/api/users
@@ -21,7 +21,7 @@ Content-Type: application/json
 }
 
 ### modificar un user (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/users/3a7a4c51-6f50-481e-95b1-d7fcb0931233
+PUT http://localhost:3000/api/users/654d8d58c95916cfc5945074
 Content-Type: application/json
 
 {
@@ -36,12 +36,17 @@ Content-Type: application/json
 }
 
 ### modificar un user (PATCH - recurso parcial)
-//PATCH http://localhost:3000/api/users/a02b91bc-3769-4221-beb1-d7a3aeba7dad
-//Content-Type: application/json
+PATCH http://localhost:3000/api/users/654d8d58c95916cfc5945074
+Content-Type: application/json
 
-//{
-//  "name": "Santa Cruz"
-//}
+{
+  "name": "Mirtha",
+  "lastname": "Legrand",
+  "phone_number": "3412456345",
+  "email": "mlegrand@gmail.com",
+  "username": "mir",
+  "password": "123"
+}
 
 ### borrar un user
-DELETE http://localhost:3000/api/users/3a7a4c51-6f50-481e-95b1-d7fcb0931233
+DELETE http://localhost:3000/api/users/654d9a246230ef3639de8cab

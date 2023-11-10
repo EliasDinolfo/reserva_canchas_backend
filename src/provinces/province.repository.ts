@@ -1,46 +1,41 @@
 import { Repository } from "../shared/repository.js";
 import { Province } from "./province.entity.js";
+import { db } from "../shared/db/conn.js";
+import { ObjectId } from "mongodb";
 
-const provinces = [
-  new Province("Santa Fe"),
-  new Province("Buenos Aires"),
-  new Province("Cordoba"),
-];
+const provinces = db.collection<Province>("provinces");
 
 export class ProvinceRepository implements Repository<Province> {
-  public findAll(): Province[] | undefined {
-    return provinces;
+  public async findAll(): Promise<Province[] | undefined> {
+    return await provinces.find().toArray();
   }
 
-  public findOne(item: { id: string }): Province | undefined {
-    return provinces.find((province) => province.id === item.id);
+  public async findOne(item: { id: string }): Promise<Province | undefined> {
+    const _id = new ObjectId(item.id);
+    return (await provinces.findOne({ _id })) || undefined;
   }
 
-  public add(item: Province): Province | undefined {
-    provinces.push(item);
+  public async add(item: Province): Promise<Province | undefined> {
+    item._id = (await provinces.insertOne(item)).insertedId;
     return item;
   }
 
-  public update(item: Province): Province | undefined {
-    const provinceIdx = provinces.findIndex(
-      (province) => province.id === item.id
+  public async update(
+    id: string,
+    item: Province
+  ): Promise<Province | undefined> {
+    const _id = new ObjectId(id);
+    return (
+      (await provinces.findOneAndUpdate(
+        { _id },
+        { $set: item },
+        { returnDocument: "after" }
+      )) || undefined
     );
-
-    if (provinceIdx !== -1) {
-      provinces[provinceIdx] = { ...provinces[provinceIdx], ...item };
-    }
-    return provinces[provinceIdx];
   }
 
-  public delete(item: { id: string }): Province | undefined {
-    const provinceIdx = provinces.findIndex(
-      (province) => province.id === item.id
-    );
-
-    if (provinceIdx !== -1) {
-      const deletedProvinces = provinces[provinceIdx];
-      provinces.splice(provinceIdx, 1);
-      return deletedProvinces;
-    }
+  public async delete(item: { id: string }): Promise<Province | undefined> {
+    const _id = new ObjectId(item.id);
+    return (await provinces.findOneAndDelete({ _id })) || undefined;
   }
 }

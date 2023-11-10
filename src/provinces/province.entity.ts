@@ -1,5 +1,5 @@
-import crypto from "node:crypto";
+import { ObjectId } from "mongodb";
 
 export class Province {
-  constructor(public name: string, public id = crypto.randomUUID()) {}
+  constructor(public name: string, public _id?: ObjectId) {}
 }

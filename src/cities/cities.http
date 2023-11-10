@@ -3,7 +3,7 @@ GET http://localhost:3000/api/cities
 
 
 ### obtener un city
-GET http://localhost:3000/api/cities/e8d391bf-a98e-4c4e-ace4-9862ef523c30
+GET http://localhost:3000/api/cities/654d76bd51dac962061db9ea
 
 ### crear un nuevo city
 POST http://localhost:3000/api/cities
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### modificar un city (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/cities/e8d391bf-a98e-4c4e-ace4-9862ef523c30
+PUT http://localhost:3000/api/cities/654d76bd51dac962061db9ea
 Content-Type: application/json
 
 {
@@ -27,7 +27,7 @@ Content-Type: application/json
 }
 
 ### modificar un city (PATCH - recurso parcial)
-//PATCH http://localhost:3000/api/cities/ffd8c011-855a-4d76-b80c-325c2eb78ea4
+//PATCH http://localhost:3000/api/cities/654d76bd51dac962061db9ea
 //Content-Type: application/json
 
 //{
@@ -35,4 +35,4 @@ Content-Type: application/json
 //}
 
 ### borrar un city
-DELETE http://localhost:3000/api/cities/e8d391bf-a98e-4c4e-ace4-9862ef523c30
+DELETE http://localhost:3000/api/cities/654d76bd51dac962061db9ea

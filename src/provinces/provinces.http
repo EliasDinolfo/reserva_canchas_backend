@@ -3,7 +3,7 @@ GET http://localhost:3000/api/provinces
 
 
 ### obtener un province
-GET http://localhost:3000/api/provinces/61dddc92-3b57-4296-9d4b-d8b9dd168f26
+GET http://localhost:3000/api/provinces/654d76bd51dac962061db9ec
 
 ### crear un nuevo province
 POST http://localhost:3000/api/provinces
@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### modificar un province (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/provinces/61dddc92-3b57-4296-9d4b-d8b9dd168f26
+PUT http://localhost:3000/api/provinces/654d779b51dac962061db9ed
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### modificar un province (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/provinces/61dddc92-3b57-4296-9d4b-d8b9dd168f26
+PATCH http://localhost:3000/api/provinces/654d779b51dac962061db9ed
 Content-Type: application/json
 
 {
@@ -30,4 +30,4 @@ Content-Type: application/json
 }
 
 ### borrar un province
-DELETE http://localhost:3000/api/provinces/61dddc92-3b57-4296-9d4b-d8b9dd168f26
+DELETE http://localhost:3000/api/provinces/654d779b51dac962061db9ed

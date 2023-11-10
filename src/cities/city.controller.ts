@@ -20,31 +20,30 @@ function sanitizeCityInput(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-function findAll(req: Request, res: Response) {
-  res.json({ data: repository.findAll() });
+async function findAll(req: Request, res: Response) {
+  res.json({ data: await repository.findAll() });
 }
 
-function findOne(req: Request, res: Response) {
+async function findOne(req: Request, res: Response) {
   const id = req.params.id;
-  const city = repository.findOne({ id });
+  const city = await repository.findOne({ id });
   if (!city) {
     return res.status(404).send({ message: "City not found" });
   }
   res.json({ data: city });
 }
 
-function add(req: Request, res: Response) {
+async function add(req: Request, res: Response) {
   const input = req.body.sanitizedInput;
 
   const cityInput = new City(input.name, input.id_province, input.postal_code);
 
-  const city = repository.add(cityInput);
+  const city = await repository.add(cityInput);
   return res.status(201).send({ message: "City created", data: city });
 }
 
-function update(req: Request, res: Response) {
-  req.body.sanitizedInput.id = req.params.id;
-  const city = repository.update(req.body.sanitizedInput);
+async function update(req: Request, res: Response) {
+  const city = await repository.update(req.params.id, req.body.sanitizedInput);
 
   if (!city) {
     return res.status(404).send({ message: "City not found" });
@@ -55,9 +54,9 @@ function update(req: Request, res: Response) {
     .send({ message: "City updated successfully", data: city });
 }
 
-function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response) {
   const id = req.params.id;
-  const city = repository.delete({ id });
+  const city = await repository.delete({ id });
 
   if (!city) {
     res.status(404).send({ message: "City not found" });

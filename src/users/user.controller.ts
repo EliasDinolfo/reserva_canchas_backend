@@ -25,20 +25,20 @@ function sanitizeUserInput(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-function findAll(req: Request, res: Response) {
-  res.json({ data: repository.findAll() });
+async function findAll(req: Request, res: Response) {
+  res.json({ data: await repository.findAll() });
 }
 
-function findOne(req: Request, res: Response) {
+async function findOne(req: Request, res: Response) {
   const id = req.params.id;
-  const user = repository.findOne({ id });
+  const user = await repository.findOne({ id });
   if (!user) {
     return res.status(404).send({ message: "User not found" });
   }
   res.json({ data: user });
 }
 
-function add(req: Request, res: Response) {
+async function add(req: Request, res: Response) {
   const input = req.body.sanitizedInput;
 
   const userInput = new User(
@@ -52,13 +52,12 @@ function add(req: Request, res: Response) {
     input.password
   );
 
-  const user = repository.add(userInput);
+  const user = await repository.add(userInput);
   return res.status(201).send({ message: "User created", data: user });
 }
 
-function update(req: Request, res: Response) {
-  req.body.sanitizedInput.id = req.params.id;
-  const user = repository.update(req.body.sanitizedInput);
+async function update(req: Request, res: Response) {
+  const user = await repository.update(req.params.id, req.body.sanitizedInput);
 
   if (!user) {
     return res.status(404).send({ message: "User not found" });
@@ -69,9 +68,9 @@ function update(req: Request, res: Response) {
     .send({ message: "User updated successfully", data: user });
 }
 
-function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response) {
   const id = req.params.id;
-  const user = repository.delete({ id });
+  const user = await repository.delete({ id });
 
   if (!user) {
     res.status(404).send({ message: "User not found" });

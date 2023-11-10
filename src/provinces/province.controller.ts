@@ -22,31 +22,33 @@ function sanitizeProvinceInput(
   next();
 }
 
-function findAll(req: Request, res: Response) {
-  res.json({ data: repository.findAll() });
+async function findAll(req: Request, res: Response) {
+  res.json({ data: await repository.findAll() });
 }
 
-function findOne(req: Request, res: Response) {
+async function findOne(req: Request, res: Response) {
   const id = req.params.id;
-  const province = repository.findOne({ id });
+  const province = await repository.findOne({ id });
   if (!province) {
     return res.status(404).send({ message: "Province not found" });
   }
   res.json({ data: province });
 }
 
-function add(req: Request, res: Response) {
+async function add(req: Request, res: Response) {
   const input = req.body.sanitizedInput;
 
   const provinceInput = new Province(input.name);
 
-  const province = repository.add(provinceInput);
+  const province = await repository.add(provinceInput);
   return res.status(201).send({ message: "Province created", data: province });
 }
 
-function update(req: Request, res: Response) {
-  req.body.sanitizedInput.id = req.params.id;
-  const province = repository.update(req.body.sanitizedInput);
+async function update(req: Request, res: Response) {
+  const province = await repository.update(
+    req.params.id,
+    req.body.sanitizedInput
+  );
 
   if (!province) {
     return res.status(404).send({ message: "Province not found" });
@@ -57,9 +59,9 @@ function update(req: Request, res: Response) {
     .send({ message: "Province updated successfully", data: province });
 }
 
-function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response) {
   const id = req.params.id;
-  const province = repository.delete({ id });
+  const province = await repository.delete({ id });
 
   if (!province) {
     res.status(404).send({ message: "Province not found" });

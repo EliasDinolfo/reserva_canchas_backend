@@ -1,4 +1,4 @@
-import crypto from "node:crypto";
+import { ObjectId } from "mongodb";
 
 export class User {
   constructor(
@@ -10,6 +10,6 @@ export class User {
     public role: string,
     public username: string,
     public password: string,
-    public id = crypto.randomUUID()
+    public _id?: ObjectId
   ) {}
 }
