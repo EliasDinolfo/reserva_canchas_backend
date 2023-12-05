@@ -3,6 +3,7 @@ import {
   sanitizeCityInput,
   findAll,
   findOne,
+  findAllByProvince,
   add,
   update,
   remove,
@@ -12,6 +13,7 @@ export const cityRouter = Router();
 
 cityRouter.get("/", findAll);
 cityRouter.get("/:id", findOne);
+cityRouter.get("/province/:province", findAllByProvince);
 cityRouter.post("/", sanitizeCityInput, add);
 cityRouter.put("/:id", sanitizeCityInput, update);
 cityRouter.patch("/:id", sanitizeCityInput, update);

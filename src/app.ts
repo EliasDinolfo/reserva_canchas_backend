@@ -6,8 +6,10 @@ import { cityRouter } from "./cities/city.routes.js";
 import { userRouter } from "./users/user.routes.js";
 import { orm } from "./shared/db/orm.js";
 import { RequestContext } from "@mikro-orm/core";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use((req, res, next) => {

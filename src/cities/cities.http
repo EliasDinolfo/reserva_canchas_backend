@@ -19,6 +19,9 @@ Content-Type: application/json
 ### GET one
 http://localhost:3000/api/cities/{{id}}
 
+### GET all by province id
+http://localhost:3000/api/cities/province/654e27ca0880972da9a187bb
+
 ### PUT
 PUT http://localhost:3000/api/cities/{{id}}
 Content-Type: application/json
@@ -47,6 +50,17 @@ Content-Type: application/json
 {
   "name": "Santa Fe",
   "province":"654e27ca0880972da9a187bb",
+  "postal_code":"2000"
+}
+
+### POST another
+# @name createCityToDelete
+POST http://localhost:3000/api/cities
+Content-Type: application/json
+
+{
+  "name": "Cordoba",
+  "province":"654e27ca0880972da9a187cc",
   "postal_code":"2000"
 }
 ### DELETE
