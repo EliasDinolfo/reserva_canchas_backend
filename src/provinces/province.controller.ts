@@ -42,6 +42,13 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
+  /* const name = req.body.name;
+  let province = await em.findOne(Province, { name });
+  if (province !== null) {
+    return res.status(400).json({
+      message: "La provincia ingresada ya existe." + province + req.body.name,
+    });
+  } */
   try {
     const province = em.create(Province, req.body);
     await em.flush();
