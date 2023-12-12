@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
 import { Province } from "./province.entity.js";
+import { City } from "../cities/city.entity.js";
 
 /* function sanitizeProvinceInput(
   req: Request,
@@ -74,8 +75,18 @@ async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const province = em.getReference(Province, id);
-    await em.removeAndFlush(province);
-    res.status(200).send({ message: "Province deleted" });
+    const cities = await em.find(City, { province: id });
+    if (cities.length > 0) {
+      return res.status(500).send({
+        message:
+          "No se puede eliminar la provincia porque tiene " +
+          cities.length +
+          " ciudad/es asociada/s.",
+      });
+    } else {
+      await em.removeAndFlush(province);
+      res.status(200).send({ message: "Province deleted" });
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

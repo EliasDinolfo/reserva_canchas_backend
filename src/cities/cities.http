@@ -8,19 +8,19 @@ POST http://localhost:3000/api/cities
 Content-Type: application/json
 
 {
-  "name": "Rosario",
-  "province":"654e27ca0880972da9a187bb",
-  "postal_code":"2000"
+  "name": "Ciudad 3",
+  "province":"65775579219de3a9193675a2",
+  "postal_code":"3500"
 }
 
 ### ID
 @id = {{createCity.response.body.data.id}}
 
 ### GET one
-http://localhost:3000/api/cities/{{id}}
+http://localhost:3000/api/cities/6577b652603b938a9fcb2c0b
 
 ### GET all by province id
-http://localhost:3000/api/cities/province/654e27ca0880972da9a187bb
+http://localhost:3000/api/cities/province/6574c49d3f9d7280c4acf8a6
 
 ### PUT
 PUT http://localhost:3000/api/cities/{{id}}
