@@ -12,7 +12,6 @@ Content-Type: application/json
   "province":"65775579219de3a9193675a2",
   "postal_code":"3500"
 }
-
 ### ID
 @id = {{createCity.response.body.data.id}}
 

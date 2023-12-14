@@ -1,0 +1,92 @@
+### GET all complexes
+
+http://localhost:3000/api/complexes
+
+
+
+### POST a character
+# @name createComplex
+POST http://localhost:3000/api/complexes
+Content-Type: application/json
+
+{
+  "name": "Vale Chumbar",
+  "address":"Av. Francia 321",
+  "phone":"353122525",
+  "email":"valeChumbar@gmail.com",
+  "city":"6577d836603b938a9fcb2c1b"
+}
+
+### ID
+@id = {{createComplex.response.body.data.id}}
+
+### GET one
+http://localhost:3000/api/complexes/657a6c984d2c5660ee59aa13
+
+### GET all by city id
+http://localhost:3000/api/cities/province/6577d836603b938a9fcb2c1b
+
+### PUT
+PUT http://localhost:3000/api/complexes/{{id}}
+Content-Type: application/json
+
+{
+  "name": "Vale Chumbar 2",
+  "address":"Av. Francia 3215",
+  "phone":"353122525",
+  "email":"valeChumbar2@gmail.com",
+  "city":"6577d836603b938a9fcb2c1b"
+}
+
+### POST
+POST http://localhost:3000/api/complexes
+Content-Type: application/json
+
+{
+  "name": "Cancha llena",
+  "address":"Av. San Martin 235",
+  "phone":"35552121",
+  "email":"canchallena@gmail.com",
+  "city":"6577d836603b938a9fcb2c1b"
+}
+
+### POST another
+# @name createCityToDelete
+POST http://localhost:3000/api/complexes
+Content-Type: application/json
+
+{
+  "name": "Cancha llena 2",
+  "address":"Av. San Martin 2355",
+  "phone":"35552121",
+  "email":"canchallena2@gmail.com",
+  "city":"6577d836603b938a9fcb2c1b"
+}
+
+### POST another
+# @name createComplexToDelete
+POST http://localhost:3000/api/complexes
+Content-Type: application/json
+
+{
+  "name": "Borrar",
+  "address":"borrar",
+  "phone":"borrar",
+  "email":"borrar",
+  "city":"6577d836603b938a9fcb2c1b"
+}
+### DELETE
+@idToDelete = {{createComplexToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/complexes/{{idToDelete}}
+
+### PATCH
+PATCH http://localhost:3000/api/complexes/{{idToDelete}}
+Content-Type: application/json
+
+{
+  "name": "Canchita",
+  "address":"Av. Mendoza 3512",
+  "phone":"34512",
+  "email":"canchita@gmail.com",
+  "city":"6577d836603b938a9fcb2c1b"
+}

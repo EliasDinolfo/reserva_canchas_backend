@@ -4,6 +4,7 @@ import express from "express";
 import { provinceRouter } from "./provinces/province.routes.js";
 import { cityRouter } from "./cities/city.routes.js";
 import { userRouter } from "./users/user.routes.js";
+import { complexRouter } from "./complexes/complex.routes.js";
 import { orm } from "./shared/db/orm.js";
 import { RequestContext } from "@mikro-orm/core";
 import cors from "cors";
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 app.use("/api/provinces", provinceRouter);
 app.use("/api/cities", cityRouter);
 app.use("/api/users", userRouter);
+app.use("/api/complexes", complexRouter);
 
 app.use((_, res) => {
   return res.status(404).send({ message: "Resource not found" });
