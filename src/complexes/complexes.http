@@ -90,3 +90,6 @@ Content-Type: application/json
   "email":"canchita@gmail.com",
   "city":"6577d836603b938a9fcb2c1b"
 }
+
+### GET ALL BY CITY
+GET http://localhost:3000/api/complexes/city/657a5abda72cce5a7dff1b62
