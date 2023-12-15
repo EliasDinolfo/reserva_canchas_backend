@@ -21,6 +21,14 @@ import { City } from "../cities/city.entity.js";
   next();
 } */
 
+function validateData(req: Request, res: Response) {
+  if (req.body.name.length > 30) {
+    return "El máximo de longitud de la provincia es de 30.";
+  } else {
+    return "";
+  }
+}
+
 const em = orm.em;
 
 async function findAll(req: Request, res: Response) {
@@ -43,13 +51,11 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
-  /* const name = req.body.name;
-  let province = await em.findOne(Province, { name });
-  if (province !== null) {
-    return res.status(400).json({
-      message: "La provincia ingresada ya existe." + province + req.body.name,
-    });
-  } */
+  let mensaje: string = "";
+  mensaje = validateData(req, res);
+  if (mensaje.length !== 0) {
+    return res.status(400).json({ message: mensaje });
+  }
   try {
     const province = em.create(Province, req.body);
     await em.flush();
@@ -60,6 +66,11 @@ async function add(req: Request, res: Response) {
 }
 
 async function update(req: Request, res: Response) {
+  let mensaje: string = "";
+  mensaje = validateData(req, res);
+  if (mensaje.length !== 0) {
+    return res.status(400).json({ message: mensaje });
+  }
   try {
     const id = req.params.id;
     const province = em.getReference(Province, id);

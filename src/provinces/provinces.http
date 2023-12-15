@@ -7,7 +7,7 @@ POST http://localhost:3000/api/provinces
 Content-Type: application/json
 
 {
-  "name": "Rio Negro"
+  "name": "abbbbbbbbbb"
 }
 
 ### ID
@@ -18,11 +18,11 @@ GET http://localhost:3000/api/provinces/{{id}}
 
 
 ### PUT
-PUT  http://localhost:3000/api/provinces/{{id}}
+PUT  http://localhost:3000/api/provinces/6577d7da603b938a9fcb2c19
 Content-Type: application/json
 
 {
-  "name": "Rio Negro"
+  "name": "Rio Negro ada das dasd as dasd as dasd as "
 }
 
 ### POST2
